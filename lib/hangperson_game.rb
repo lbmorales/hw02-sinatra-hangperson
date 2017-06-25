@@ -36,18 +36,13 @@ class HangpersonGame
   end
 
   def word_with_guesses
-    # word.gsub!('-') if guesses.size.zero?
-    # word.each_char do |c|
-    #   word.gsub!(c, '-') unless guesses.match(c)
-    #   word
-    # end
     w = ''
     word.each_char do |c|
-      if guesses.include?(c)
-        w << c
-      else
-        w << '-'
-      end
+      w << if guesses.include?(c)
+             c
+           else
+             '-'
+           end
     end
     w
   end

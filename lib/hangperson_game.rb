@@ -22,24 +22,29 @@ class HangpersonGame
   end
 
   def guess(character)
-    raise ArgumentError unless character
-    raise ArgumentError if character.empty?
-    raise ArgumentError if character !~ /[a-zA-Z]/
-    if character =~ /[a-z]/ && word.include?(character) && !guesses.include?(character) && character !~ /[A-Z]/
+    raise ArgumentError if character.nil? || character.empty? || character !~ /[a-zA-Z]+/
+    character.downcase!
+    if word.include?(character) && !guesses.include?(character)
       guesses << character
-      return true
-    elsif character =~ /[a-z]/ && !word.include?(character) && !wrong_guesses.include?(character) && character !~ /[A-Z]/
+      true
+    elsif !word.include?(character) && !wrong_guesses.include?(character)
       wrong_guesses << character
-      return true
+      true
+    else
+      false
     end
-    false
   end
 
   def word_with_guesses
-    word.gsub!('-') if guesses.size.zero?
+    w = ''
     word.each_char do |c|
-      word.gsub!(c, '-') unless guesses.match(c)
+      w << if guesses.include?(c)
+             c
+           else
+             '-'
+           end
     end
+    w
   end
 
   def check_win_or_lose
@@ -50,6 +55,5 @@ class HangpersonGame
     else
       :play
     end
-
   end
 end
